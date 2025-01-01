@@ -44,7 +44,6 @@ Microsoft::WRL::ComPtr<ID3D12Resource> d3dUtil::CreateDefaultBuffer(
 {
     ComPtr<ID3D12Resource> defaultBuffer;
 
-    // Create the actual default buffer resource.
     CD3DX12_HEAP_PROPERTIES defaultHeapProps(D3D12_HEAP_TYPE_DEFAULT);
     CD3DX12_RESOURCE_DESC bufferDesc = CD3DX12_RESOURCE_DESC::Buffer(byteSize);
 
@@ -56,25 +55,21 @@ Microsoft::WRL::ComPtr<ID3D12Resource> d3dUtil::CreateDefaultBuffer(
         nullptr,
         IID_PPV_ARGS(defaultBuffer.GetAddressOf())));
 
-    // In order to copy CPU memory data into our default buffer, we need to create
-    // an intermediate upload heap. 
     CD3DX12_HEAP_PROPERTIES uploadHeapProps(D3D12_HEAP_TYPE_UPLOAD);
 
     ThrowIfFailed(device->CreateCommittedResource(
         &uploadHeapProps,
         D3D12_HEAP_FLAG_NONE,
-        &bufferDesc,  // 같은 설명자 재사용
+        &bufferDesc,  
         D3D12_RESOURCE_STATE_GENERIC_READ,
         nullptr,
         IID_PPV_ARGS(uploadBuffer.GetAddressOf())));
 
-    // Describe the data we want to copy into the default buffer.
     D3D12_SUBRESOURCE_DATA subResourceData = {};
     subResourceData.pData = initData;
     subResourceData.RowPitch = byteSize;
     subResourceData.SlicePitch = subResourceData.RowPitch;
 
-    // ResourceBarrier 수정
     CD3DX12_RESOURCE_BARRIER barrierToCopy = CD3DX12_RESOURCE_BARRIER::Transition(
         defaultBuffer.Get(),
         D3D12_RESOURCE_STATE_COMMON,
@@ -120,7 +115,6 @@ ComPtr<ID3DBlob> d3dUtil::CompileShader(
 
 std::wstring DxException::ToString()const
 {
-    // Get the string description of the error code.
     _com_error err(ErrorCode);
     std::wstring msg = err.ErrorMessage();
 
