@@ -224,12 +224,14 @@ void D3DApp::OnResize()
 
 	FlushCommandQueue();
 
-	mScreenViewport.TopLeftX = 0;
-	mScreenViewport.TopLeftY = 0;
-	mScreenViewport.Width    = static_cast<float>(mClientWidth);
-	mScreenViewport.Height   = static_cast<float>(mClientHeight);
-	mScreenViewport.MinDepth = 0.0f;
-	mScreenViewport.MaxDepth = 1.0f;
+	mScreenViewport = {
+		.TopLeftX = 0,
+		.TopLeftY = 0,
+		.Width = static_cast<float>(mClientWidth),
+		.Height = static_cast<float>(mClientHeight),
+		.MinDepth = 0.0f,
+		.MaxDepth = 1.0f
+	};
 
     mScissorRect = { 0, 0, mClientWidth, mClientHeight };
 }
@@ -351,17 +353,18 @@ LRESULT D3DApp::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 bool D3DApp::InitMainWindow()
 {
-	WNDCLASS wc;
-	wc.style         = CS_HREDRAW | CS_VREDRAW;
-	wc.lpfnWndProc   = MainWndProc; 
-	wc.cbClsExtra    = 0;
-	wc.cbWndExtra    = 0;
-	wc.hInstance     = mhAppInst;
-	wc.hIcon         = LoadIcon(0, IDI_APPLICATION);
-	wc.hCursor       = LoadCursor(0, IDC_ARROW);
-	wc.hbrBackground = (HBRUSH)GetStockObject(NULL_BRUSH);
-	wc.lpszMenuName  = 0;
-	wc.lpszClassName = L"MainWnd";
+	WNDCLASS wc = {
+		.style = CS_HREDRAW | CS_VREDRAW,
+		.lpfnWndProc = MainWndProc,
+		.cbClsExtra = 0,
+		.cbWndExtra = 0,
+		.hInstance = mhAppInst,
+		.hIcon = LoadIcon(0, IDI_APPLICATION),
+		.hCursor = LoadCursor(0, IDC_ARROW),
+		.hbrBackground = (HBRUSH)GetStockObject(NULL_BRUSH),
+		.lpszMenuName = 0,
+		.lpszClassName = L"MainWnd"
+	};
 
 	if( !RegisterClass(&wc) )
 	{
