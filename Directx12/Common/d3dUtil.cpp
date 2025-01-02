@@ -69,10 +69,11 @@ Microsoft::WRL::ComPtr<ID3D12Resource> d3dUtil::CreateDefaultBuffer(
         IID_PPV_ARGS(uploadBuffer.GetAddressOf())));
 
     // Describe the data we want to copy into the default buffer.
-    D3D12_SUBRESOURCE_DATA subResourceData = {};
-    subResourceData.pData = initData;
-    subResourceData.RowPitch = byteSize;
-    subResourceData.SlicePitch = subResourceData.RowPitch;
+    D3D12_SUBRESOURCE_DATA subResourceData = {
+        .pData = initData,
+        .RowPitch = static_cast<LONG_PTR>(byteSize),
+        .SlicePitch = subResourceData.RowPitch
+    };
 
     // ResourceBarrier ¼öÁ¤
     CD3DX12_RESOURCE_BARRIER barrierToCopy = CD3DX12_RESOURCE_BARRIER::Transition(
