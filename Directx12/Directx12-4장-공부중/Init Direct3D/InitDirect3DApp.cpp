@@ -93,7 +93,7 @@ void InitDirect3DApp::Draw(const GameTimer& gt)
 	auto backBufferView = CurrentBackBufferView();
 	auto depthStencilView = DepthStencilView();
 
-	mCommandList->ClearRenderTargetView(backBufferView, Colors::Aqua, 0, nullptr);
+	mCommandList->ClearRenderTargetView(backBufferView, Colors::LightYellow, 0, nullptr);
 	mCommandList->ClearDepthStencilView(depthStencilView, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, nullptr);
 
 	mCommandList->OMSetRenderTargets(1, &backBufferView, true, &depthStencilView);
